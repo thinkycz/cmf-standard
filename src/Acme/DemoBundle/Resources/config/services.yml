@@ -1,0 +1,33 @@
+services:
+    acme_demo.block.unit:
+        class: Acme\DemoBundle\Block\UnitBlockService
+        arguments: [acme_demo.block.unit, "@templating"]
+        tags:
+            - { name: sonata.block }
+    acme.demo.phpcr.initializer:
+        class: Doctrine\Bundle\PHPCRBundle\Initializer\GenericInitializer
+        arguments:
+            - My custom initializer
+            - ["/cms/pages", "/cms/posts", "/cms/routes"]
+        tags:
+            - { name: doctrine_phpcr.initializer }
+    acme.demo.admin.page:
+        class: Acme\DemoBundle\Admin\PageAdmin
+        arguments:
+            - ''
+            - Acme\DemoBundle\Document\Page
+            - 'SonataAdminBundle:CRUD'
+        tags:
+            - { name: sonata.admin, manager_type: doctrine_phpcr, group: 'Vodafone CMS', label: 'VF Page' }
+        calls:
+            - [setRouteBuilder, ['@sonata.admin.route.path_info_slashes']]
+    acme.demo.admin.post:
+        class: Acme\DemoBundle\Admin\PostAdmin
+        arguments:
+            - ''
+            - Acme\DemoBundle\Document\Post
+            - 'SonataAdminBundle:CRUD'
+        tags:
+            - { name: sonata.admin, manager_type: doctrine_phpcr, group: 'Vodafone CMS', label: 'VF Posts' }
+        calls:
+            - [setRouteBuilder, ['@sonata.admin.route.path_info_slashes']]
